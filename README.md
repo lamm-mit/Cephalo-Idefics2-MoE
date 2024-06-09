@@ -15,6 +15,10 @@ For this sample model, the model has 20b parameters (three experts, 8b each, and
 
 Model weights and examples are provided at: [https://huggingface.co/lamm-mit/Cephalo-Phi-3-MoE-vision-128k-3x4b-beta](https://huggingface.co/lamm-mit/Cephalo-Phi-3-MoE-vision-128k-3x4b-beta)
 
+## Example Inference Notebook in Colab
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lamm-mit/Cephalo-Idefics2-MoE/blob/main/Cephalo-Idefics-2-MoE-3x8b.ipynb)
+
 ## Download Idefics-2 MoE Model and Sample inference code
 
 ```python
