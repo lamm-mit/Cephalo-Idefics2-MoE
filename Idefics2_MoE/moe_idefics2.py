@@ -52,14 +52,6 @@ class MoE(nn.Module):
             expert_outputs = []
             for expert in self.experts:
                 expert_outputs.append(expert.down_proj(expert.act_fn(expert.gate_proj(x)) * expert.up_proj(x)))
-                '''
-                
-                up_states = expert.gate_up_proj(x.view(-1, x.size(-1)))  # Flatten to [batch_size * seq_length, input_dim]
-                gate, up_states = up_states.chunk(2, dim=-1)
-                up_states = up_states * expert.activation_fn(gate)
-                expert_output = expert.down_proj(up_states)
-                expert_outputs.append(expert_output.view(batch_size, seq_length, -1))
-                '''
 
             expert_outputs = torch.stack(expert_outputs, dim=-1)  # Shape: [batch_size, seq_length, hidden_size, num_experts]
             
@@ -160,7 +152,6 @@ class Idefics2ForCausalLMMoEConfig(Idefics2Config):
         }
         self.use_embeddings_in_router=use_embeddings_in_router
 
-
 #Define MoE Model
 class Idefics2ForCausalLMMoE(Idefics2ForConditionalGeneration):
     
@@ -197,12 +188,6 @@ class Idefics2ForCausalLMMoE(Idefics2ForConditionalGeneration):
             self.num_expert_models = len(expert_models)
             self._init_moe_layers(base_model, expert_models, k, layer_dtype)
         else:
-            print(
-                "Init function called and generating dummy experts: k=",
-                k,
-                "experts=",
-                self.config.num_expert_models,
-            )
             num_dummy_experts = self.config.num_expert_models
             self._init_moe_layers_with_dummy_experts(
                 self.model, k, num_dummy_experts, layer_dtype
@@ -211,7 +196,6 @@ class Idefics2ForCausalLMMoE(Idefics2ForConditionalGeneration):
         self.config.model_type = "idefics2_moe"
 
     def _init_base_model(self):
-        print ("init base model")
         return PreTrainedModel(self.config)
 
     def _init_moe_layers(self, base_model, expert_models, k, layer_dtype):
@@ -287,7 +271,6 @@ class Idefics2ForCausalLMMoE(Idefics2ForConditionalGeneration):
     def generate(self, *args, **kwargs):
         return self.model.generate(*args, **kwargs)
   
-    
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path, *model_args, **kwargs):
         model = super(Idefics2ForCausalLMMoE, cls).from_pretrained(
@@ -321,8 +304,6 @@ class Idefics2ForCausalLMMoE(Idefics2ForConditionalGeneration):
         self.to(self.custom_device)
         self.eval()
 
-        print ('dtype:', self.layer_dtype, 'device=', self.custom_device)
-    
         all_gating_layer_params = []
         all_loss_histories = []  # To store loss histories for each layer
     
