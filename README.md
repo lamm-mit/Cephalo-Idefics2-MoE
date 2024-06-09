@@ -344,3 +344,16 @@ moe_model = AutoModelForCausalLM.from_pretrained(
 
 count_parameters(moe_model)
 ```
+
+## Citation
+
+Please cite as:
+
+```bibtex
+@article{Buehler_Cephalo_2024,
+  title={Cephalo: Multi-Modal Vision-Language Models for Bio-Inspired Materials Analysis and Design},
+  author={Markus J. Buehler},
+  journal={arXiv preprint arXiv:2405.19076},
+  year={2024}
+}
+```
