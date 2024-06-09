@@ -5,11 +5,11 @@ Cephalo is a series of multimodal materials science and engineering focused visi
 
 ![image/png](https://cdn-uploads.huggingface.co/production/uploads/623ce1c6b66fedf374859fe7/kl5GWBP9WS0D4uwd1t3S7.png)
 
-This version of Cephalo, lamm-mit/Cephalo-Idefics2-3x8b-beta, is a Mixture-of-Expert model based on variants and fine-tuned versions of the Idefics-2 model. The basic model architecture is as follows:
+This version of Cephalo, lamm-mit/Cephalo-Idefics2-vision-3x8b-beta, is a Mixture-of-Expert model based on variants and fine-tuned versions of the Idefics-2 model. The basic model architecture is as follows:
 
 ![image/png](https://cdn-uploads.huggingface.co/production/uploads/623ce1c6b66fedf374859fe7/b7BK8ZtDzTMsyFDi0wP3w.png)
 
-This model leverages multiple expert networks to process different parts of the input, allowing for more efficient and specialized computations. For each token in the input sequence, a gating layer computes scores for all experts and selects the top-*k* experts based on these scores. We use a *softmax (..)* activation function to ensure that the weights across the chosen experts sum up to unity.  The output of the gating layer is a set of top-*k* values and their corresponding indices. The selected experts' outputs ($\mathbf{Y}$) are then computed and combined using a weighted sum, where the weights are given by the top-*k* values.  This sparse MoE mechanism allows our model to dynamically allocate computational resources, improving efficiency and performance for complex vision-language tasks. depicts an overview of the architecture. 
+This model leverages multiple expert networks to process different parts of the input, allowing for more efficient and specialized computations. For each token in the input sequence, a gating layer computes scores for all experts and selects the top-*k* experts based on these scores. We use a *softmax (..)* activation function to ensure that the weights across the chosen experts sum up to unity.  The output of the gating layer is a set of top-*k* values and their corresponding indices. The selected experts' outputs Y) are then computed and combined using a weighted sum, where the weights are given by the top-*k* values.  This sparse MoE mechanism allows our model to dynamically allocate computational resources, improving efficiency and performance for complex vision-language tasks. 
 
 For this sample model, the model has 20b parameters (three experts, 8b each, and 8b active parameters during inference). The instructions below include a detailed explanation about how other models can be constructed.
 
@@ -38,7 +38,7 @@ def count_parameters(model):
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-model_name_moe = f"lamm-mit/Cephalo-Idefics2-3x8b-beta"
+model_name_moe = f"lamm-mit/Cephalo-Idefics2-vision-3x8b-beta"
 config = AutoConfig.from_pretrained(model_name_moe, trust_remote_code=True)
 processor = AutoProcessor.from_pretrained(model_name_moe, trust_remote_code=True) 
 moe_model = AutoModelForCausalLM.from_pretrained(
