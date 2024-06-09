@@ -84,7 +84,6 @@ class ModifiedIdefics2DecoderLayer(nn.Module):
         self.mlp = moe_layer
         self.input_layernorm = original_layer.input_layernorm
         self.post_attention_layernorm = original_layer.post_attention_layernorm 
-        #print ("Init: ModifiedIdefics2DecoderLayer")
 
     def forward(
         self,
@@ -190,9 +189,6 @@ class Idefics2ForCausalLMMoE(Idefics2ForConditionalGeneration):
             "AutoModelForCausalLM": "moe_idefics2.Idefics2ForCausalLMMoE",
         }
 
-        self.use_embeddings_in_router=config.use_embeddings_in_router
-        print ("Use embeddigs in router: ", self.use_embeddings_in_router )
-
         self.model = base_model or Idefics2ForConditionalGeneration(
             self.config
         )  
@@ -200,9 +196,7 @@ class Idefics2ForCausalLMMoE(Idefics2ForConditionalGeneration):
         if base_model and expert_models:
             self.num_expert_models = len(expert_models)
             self._init_moe_layers(base_model, expert_models, k, layer_dtype)
-            print ("CONSTRUCTOR self.model",self.model)
         else:
-            
             print(
                 "Init function called and generating dummy experts: k=",
                 k,
