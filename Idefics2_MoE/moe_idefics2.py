@@ -405,7 +405,6 @@ class Idefics2ForCausalLMMoE(Idefics2ForConditionalGeneration):
         for layer_idx, params in enumerate(gating_layer_params):
             self.model.model.text_model.layers[layer_idx].mlp.gating_layer.load_state_dict(params) 
 
-
 def freeze_except_gating_layers(model):
 
     # Freeze all parameters
@@ -413,7 +412,7 @@ def freeze_except_gating_layers(model):
         param.requires_grad = False
 
     # Unfreeze gating layer parameters
-    for layer in model.model.text_model.layers:
+    for layer in model.model.model.text_model.layers:
         for name, param in layer.mlp.gating_layer.named_parameters():
             param.requires_grad = True
 
@@ -421,7 +420,7 @@ def un_freeze_all(model):
     # Freeze all parameters
     for param in model.parameters():
         param.requires_grad = True
-
+        
 from transformers import AutoConfig
 
 AutoConfig.register("idefics2_moe", Idefics2ForCausalLMMoEConfig)
